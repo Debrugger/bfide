@@ -5,9 +5,14 @@
 
 class MainWindow: public QMainWindow, public Ui::MainWindow
 {
+	Q_OBJECT;
 public:
 	MainWindow();
 	virtual ~MainWindow();
+
+public slots:
+	void OnActionOpen();
+	void OnActionSave();
 };
 
 #endif //__MAINWINDOW_H
