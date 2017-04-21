@@ -1,6 +1,7 @@
 #include "sysinc.h"
 #include "qtinc.h"
 #include "mainwindow.h"
+#include "brainfuck.h"
 
 QString filename;
 
@@ -10,6 +11,7 @@ MainWindow::MainWindow()
 	terminal_edit->setReadOnly(true);
 	connect(action_open, SIGNAL(triggered()), this, SLOT(OnActionOpen()));
 	connect(action_save, SIGNAL(triggered()), this, SLOT(OnActionSave()));
+	connect(button_exec, SIGNAL(clicked()), this, SLOT(OnExecuteClicked()));
 }
 
 MainWindow::~MainWindow()
@@ -22,7 +24,7 @@ void MainWindow::OnActionOpen()
 	QFile file(filename);
 	file.open((QFile::ReadOnly | QFile::Text));
 	QTextStream in(&file);
-	main_edit->setText(in.readAll());
+	main_edit->setPlainText(in.readAll());
 }
 
 void MainWindow::OnActionSave()
@@ -32,5 +34,17 @@ void MainWindow::OnActionSave()
 	QFile file(filename);
 	file.open((QFile::ReadWrite | QFile::Text));
 	QTextStream out(&file);
-	out << "placeholder";
+	out << main_edit->toPlainText();
+}
+
+void MainWindow::OnExecuteClicked()
+{
+	Brainfuck brainfuck;
+	std::vector<Command> parsed = brainfuck.Parse(main_edit->toPlainText().toStdString());
+
+	//for (unsigned int i = 0; i < parsed.size(); i++)
+	//	std::cout << "Command " << parsed[i].type << std::endl;
+	//std::cout << "nb commands: " << parsed.size();
+
+	brainfuck.ExecuteAll(parsed);
 }

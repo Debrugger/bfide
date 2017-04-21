@@ -13,6 +13,7 @@ public:
 public slots:
 	void OnActionOpen();
 	void OnActionSave();
+	void OnExecuteClicked();
 };
 
 #endif //__MAINWINDOW_H
