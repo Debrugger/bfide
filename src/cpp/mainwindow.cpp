@@ -1,6 +1,7 @@
 #include "sysinc.h"
 #include "qtinc.h"
 #include "mainwindow.h"
+#include "cell.h"
 #include "brainfuck.h"
 
 QString filename;
@@ -9,9 +10,18 @@ MainWindow::MainWindow()
 {
 	setupUi(this);
 	terminal_edit->setReadOnly(true);
+	input_edit->setReadOnly(true);
 	connect(action_open, SIGNAL(triggered()), this, SLOT(OnActionOpen()));
 	connect(action_save, SIGNAL(triggered()), this, SLOT(OnActionSave()));
 	connect(button_exec, SIGNAL(clicked()), this, SLOT(OnExecuteClicked()));
+	connect(button_stop, SIGNAL(clicked()), this, SLOT(OnStopClicked()));
+	cell_widget = new QWidget;
+	cell_widget->setGeometry(QRect(10, 470, 981, 91));
+	cell_layout = new QHBoxLayout(cell_widget);
+	cell_layout->setObjectName(QStringLiteral("cell_layout"));
+	cell_layout->setSizeConstraint(QLayout::SetFixedSize);
+
+	cell_scroll_area->setWidget(cell_widget);
 }
 
 MainWindow::~MainWindow()
@@ -47,4 +57,8 @@ void MainWindow::OnExecuteClicked()
 	//std::cout << "nb commands: " << parsed.size();
 
 	brainfuck.ExecuteAll(parsed);
+}
+
+void MainWindow::OnStopClicked()
+{
 }

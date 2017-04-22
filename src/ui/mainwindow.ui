@@ -43,7 +43,7 @@
       <x>690</x>
       <y>140</y>
       <width>301</width>
-      <height>321</height>
+      <height>281</height>
      </rect>
     </property>
    </widget>
@@ -87,12 +87,15 @@
     </property>
    </widget>
    <widget class="QScrollArea" name="cell_scroll_area">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>470</y>
       <width>981</width>
-      <height>80</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="widgetResizable">
@@ -104,9 +107,11 @@
        <x>0</x>
        <y>0</y>
        <width>979</width>
-       <height>78</height>
+       <height>89</height>
       </rect>
      </property>
+     <zorder>frame_2</zorder>
+     <zorder>frame_3</zorder>
     </widget>
    </widget>
    <widget class="QPushButton" name="button_stop">
@@ -122,6 +127,16 @@
      <string>Stop</string>
     </property>
    </widget>
+   <widget class="QLineEdit" name="input_edit">
+    <property name="geometry">
+     <rect>
+      <x>690</x>
+      <y>430</y>
+      <width>301</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -129,7 +144,7 @@
      <x>0</x>
      <y>0</y>
      <width>1002</width>
-     <height>19</height>
+     <height>16</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -199,12 +214,12 @@
   </action>
   <action name="action_about">
    <property name="text">
-    <string>About</string>
+    <string>&amp;About</string>
    </property>
   </action>
   <action name="action_quit">
    <property name="text">
-    <string>Quit</string>
+    <string>&amp;Quit</string>
    </property>
   </action>
  </widget>

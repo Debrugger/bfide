@@ -1,6 +1,8 @@
 #include "sysinc.h"
 #include "qtinc.h"
 #include "brainfuck.h"
+#include "mainwindow.h"
+#include "globals.h"
 
 std::unordered_map<char, Type> command_table = { {'+', ADD}, {'-', SUB}, {'>', INC}, {'<', DEC}, {'[', BRO}, {']', BRC}, {'.', PUT}, {',', GET} };
 
@@ -28,13 +30,13 @@ std::vector<Command> Brainfuck::Parse(std::string code)
 			case ',':
 				command.type = command_table[c];
 				commands.push_back(command);
-				std::cout << "Size of commands: " << commands.size() << std::endl;
+				//std::cout << "Size of commands: " << commands.size() << std::endl;
 				break;
 			case '[':
 				command.type = command_table[c];
 				commands.push_back(command);
 				brackets.push_back(commands.size() - 1); //push index pf bracket onto bracket stack
-				std::cout << "opening bracket found, pushing_back index: " << commands.size() - 1 << std::endl;
+				//std::cout << "opening bracket found, pushing_back index: " << commands.size() - 1 << std::endl;
 				break;
 			case ']':
 				command.type = command_table[c];
@@ -43,7 +45,7 @@ std::vector<Command> Brainfuck::Parse(std::string code)
 				else
 				{
 					command.matching_bracket = brackets.back(); //matching opening bracket is the last on the stack
-					std::cout << "matching opening bracket: " << command.matching_bracket << std::endl;
+					//std::cout << "matching opening bracket: " << command.matching_bracket << std::endl;
 					brackets.pop_back();
 					commands[command.matching_bracket].matching_bracket = commands.size() - 1; //give the opening bracket its matching one too
 				}
@@ -67,28 +69,28 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 	switch (command.type)
 	{
 		case ADD:
-			std::cout << "add" << std::endl;
+			//std::cout << "add" << std::endl;
 			if (*curr_val == 255)
 				*curr_val = 0;
 			else (*curr_val)++;
 			break;
 
 		case SUB:
-			std::cout << "sub" << std::endl;
+			//std::cout << "sub" << std::endl;
 			if (!*curr_val)
 				*curr_val = 255;
 			else (*curr_val)--;
 			break;
 
 		case INC:
-			std::cout << "inc" << std::endl;
+			//std::cout << "inc" << std::endl;
 			if (current_cell == cells.size() - 1)
 				cells.resize(cells.size() + 1);
 			current_cell++;
 			break;
 
 		case DEC:
-			std::cout << "dec" << std::endl;
+			//std::cout << "dec" << std::endl;
 			if (!current_cell)
 			{
 				break;
@@ -97,17 +99,17 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 			break;
 
 		case PUT:
-			std::cout << "put" << std::endl;
+			//std::cout << "put" << std::endl;
 			Output(static_cast<char>(*curr_val));
 			break;
 
 		case GET:
-			std::cout << "get" << std::endl;
+			//std::cout << "get" << std::endl;
 			*curr_val = GetInput();
 			break;
 
 		case BRO:
-			std::cout << "bro" << std::endl;
+			//std::cout << "bro" << std::endl;
 			br = true;
 			if (*curr_val == 0)
 				return command.matching_bracket + 1;
@@ -115,11 +117,11 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 			break;
 
 		case BRC:
-			std::cout << "brc" << std::endl;
+			//std::cout << "brc" << std::endl;
 			br = true;
-			std::cout << "*curr_val: " << *curr_val << std::endl;
-			std::cout << "index: " << index << std::endl;
-			std::cout << "matching bracket: " << command.matching_bracket << std::endl;
+			//std::cout << "*curr_val: " << *curr_val << std::endl;
+			//std::cout << "index: " << index << std::endl;
+			//std::cout << "matching bracket: " << command.matching_bracket << std::endl;
 
          if (*curr_val == 0)
 				return index + 1;
@@ -137,20 +139,34 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 void Brainfuck::ExecuteAll(std::vector<Command> commands)
 {
 	size_t i = 0;
+	mw->terminal_edit->clear();
 	while (i < commands.size())
 	{
 		i = Execute(commands, i);
-		std::cout << i << std::endl;
+		//std::cout << i << std::endl;
 	} 
 }
 
 void Brainfuck::Output(char c)
 {
-	std::cout << "Output called" << std::endl;
-	std::cout << "output character: " << c << std::endl;
+	//std::cout << "Output called" << std::endl;
+	std::cout << c;
+	QString s;
+	s = c;
+	mw->terminal_edit->moveCursor(QTextCursor::End);
+	mw->terminal_edit->textCursor().insertText(s);
 }
 
 int Brainfuck::GetInput()
 {
-	return 'C';
+   mw->input_edit->setReadOnly(false);
+	QString s;
+	QEventLoop loop;
+	QWidget::connect(mw->input_edit, SIGNAL(editingFinished()), &loop, SLOT(quit()));
+	loop.exec();
+
+   int ret = static_cast<int>(mw->input_edit->text().at(0).toLatin1());
+	mw->input_edit->setReadOnly(true);
+	mw->input_edit->clear();
+	return ret;
 }

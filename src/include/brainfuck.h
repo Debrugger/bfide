@@ -18,7 +18,7 @@ class Brainfuck
 	const int OffLimits = 200;
 	const int UnknownCommand = 300;
 	std::vector<int> cells;
-	unsigned int current_cell;
+	size_t current_cell;
 
 public:
 	Brainfuck();
@@ -28,6 +28,9 @@ public:
 	void ExecuteAll(std::vector<Command>);
 	void Output(char);
 	int GetInput();
+	size_t CurrentCell() 			{ return current_cell; };
+	size_t NbCells() 					{ return cells.size(); };
+	int CellValue(size_t index)   { return cells.at(index); };
 };
 
 

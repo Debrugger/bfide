@@ -1,16 +1,15 @@
 #include <QApplication>
-#include <QMainWindow>
 #include <QDebug>
-#include <QSignalMapper>
+
+#include <QMainWindow>
+#include <QString>
+#include <QTimer>
+
 #include <QWidget>
 #include <QLabel>
-#include <QSettings>
 #include <QPushButton>
-#include <QToolButton>
-#include <QString>
 #include <QLineEdit>
 #include <QFileDialog>
 #include <QScrollBar>
-#include <QTimer>
-
-#include <QStyleFactory>
+#include <QHBoxLayout>
+#include <QGroupBox>
