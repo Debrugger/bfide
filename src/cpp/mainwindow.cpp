@@ -19,7 +19,7 @@ MainWindow::MainWindow()
 	cell_widget->setGeometry(QRect(10, 470, 981, 91));
 	cell_layout = new QHBoxLayout(cell_widget);
 	cell_layout->setObjectName(QStringLiteral("cell_layout"));
-	cell_layout->setSizeConstraint(QLayout::SetFixedSize);
+	cell_layout->setSizeConstraint(QLayout::SetMaximumSize);
 
 	cell_scroll_area->setWidget(cell_widget);
 }

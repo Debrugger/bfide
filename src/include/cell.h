@@ -6,10 +6,14 @@ class Cell: public QWidget
 {
 	Q_OBJECT;
 	QGroupBox* group_box;
-	QLabel* index_label;
+	QLabel* value_label;
+	QLCDNumber* lcd_number;
+
 	public:
 	Cell(size_t, QHBoxLayout*);
 	~Cell();
+	void SetValue(int);
+	void Hide();
 };
 
 #endif //__CELL_H

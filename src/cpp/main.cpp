@@ -5,6 +5,7 @@
 #include "globals.h"
 
 MainWindow* mw;
+std::vector<Cell*> cell_boxes;
 
 int main(int argc, char* argv[])
 {

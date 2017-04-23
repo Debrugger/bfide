@@ -66,6 +66,12 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
    int* curr_val = &cells[current_cell];
 	bool br = false;
 
+   if (!cell_boxes.size())
+	{
+		std::cout << "!cell_boxes.size()" << std::endl;
+		cell_boxes.push_back(new Cell(0, mw->cell_layout));
+	}
+
 	switch (command.type)
 	{
 		case ADD:
@@ -73,6 +79,8 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 			if (*curr_val == 255)
 				*curr_val = 0;
 			else (*curr_val)++;
+			std::cout << current_cell << std::endl;
+			cell_boxes[current_cell]->SetValue(*curr_val);
 			break;
 
 		case SUB:
@@ -80,12 +88,16 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 			if (!*curr_val)
 				*curr_val = 255;
 			else (*curr_val)--;
+			cell_boxes[current_cell]->SetValue(*curr_val);
 			break;
 
 		case INC:
 			//std::cout << "inc" << std::endl;
 			if (current_cell == cells.size() - 1)
+			{
 				cells.resize(cells.size() + 1);
+				cell_boxes.push_back(new Cell(current_cell + 1, mw->cell_layout));
+			}
 			current_cell++;
 			break;
 
@@ -106,6 +118,7 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 		case GET:
 			//std::cout << "get" << std::endl;
 			*curr_val = GetInput();
+			cell_boxes[current_cell]->SetValue(*curr_val);
 			break;
 
 		case BRO:
@@ -138,13 +151,26 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 
 void Brainfuck::ExecuteAll(std::vector<Command> commands)
 {
+   for (auto it : cell_boxes)
+	{
+		it->Hide();
+		std::cout << "hid " << it << std::endl;
+		delete it; //segfault here
+		std::cout << "deleted " << it << std::endl;
+	}
+	cell_boxes.clear(); 
+	//std::cout << "size of cell_boxes: " << cell_boxes.size() << std::endl;
+
+	std::cout << "cell size " << cells.size() << "cell_boxes " << cell_boxes.size() << std::endl;
 	size_t i = 0;
+
 	mw->terminal_edit->clear();
+	std::cout << "cleared terminal" << std::endl;
 	while (i < commands.size())
 	{
+		std::cout << "Executing Command " << i << std::endl;
 		i = Execute(commands, i);
-		//std::cout << i << std::endl;
-	} 
+	}
 }
 
 void Brainfuck::Output(char c)

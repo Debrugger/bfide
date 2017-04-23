@@ -13,3 +13,5 @@
 #include <QScrollBar>
 #include <QHBoxLayout>
 #include <QGroupBox>
+#include <QLCDNumber>
+#include <QSizePolicy>
