@@ -79,7 +79,6 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 			if (*curr_val == 255)
 				*curr_val = 0;
 			else (*curr_val)++;
-			std::cout << current_cell << std::endl;
 			cell_boxes[current_cell]->SetValue(*curr_val);
 			break;
 
@@ -142,7 +141,8 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 			break;
 
 		default:
-			throw (UnknownCommand);
+			return -1;
+			//throw (UnknownCommand);
 	}
 	if (!br)
 		return index + 1;
@@ -154,9 +154,7 @@ void Brainfuck::ExecuteAll(std::vector<Command> commands)
    for (auto it : cell_boxes)
 	{
 		it->Hide();
-		std::cout << "hid " << it << std::endl;
-		delete it; //segfault here
-		std::cout << "deleted " << it << std::endl;
+		delete it;
 	}
 	cell_boxes.clear(); 
 	//std::cout << "size of cell_boxes: " << cell_boxes.size() << std::endl;
@@ -170,6 +168,11 @@ void Brainfuck::ExecuteAll(std::vector<Command> commands)
 	{
 		std::cout << "Executing Command " << i << std::endl;
 		i = Execute(commands, i);
+		if (i < 0)
+		{
+			mw->statusBar()->showMessage("Error executing code.");
+			break;
+		}
 	}
 }
 

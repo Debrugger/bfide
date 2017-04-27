@@ -5,9 +5,7 @@
 class Cell: public QWidget
 {
 	Q_OBJECT;
-	QGroupBox* group_box;
 	QLabel* value_label;
-	QLCDNumber* lcd_number;
 
 	public:
 	Cell(size_t, QHBoxLayout*);

@@ -22,6 +22,8 @@ MainWindow::MainWindow()
 	cell_layout->setSizeConstraint(QLayout::SetMaximumSize);
 
 	cell_scroll_area->setWidget(cell_widget);
+
+	setWindowTitle("bfide");
 }
 
 MainWindow::~MainWindow()
@@ -35,6 +37,8 @@ void MainWindow::OnActionOpen()
 	file.open((QFile::ReadOnly | QFile::Text));
 	QTextStream in(&file);
 	main_edit->setPlainText(in.readAll());
+ 	statusBar()->showMessage(filename); 
+	setWindowTitle("bfide - " + filename);
 }
 
 void MainWindow::OnActionSave()
