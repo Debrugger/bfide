@@ -8,12 +8,11 @@ class MainWindow: public QMainWindow, public Ui::MainWindow
 {
 	Q_OBJECT;
 
-   QWidget* cell_widget;
-
 public:
 	MainWindow();
 	virtual ~MainWindow();
-	QHBoxLayout* cell_layout;
+	QWidget* value_widget;
+	QWidget* index_widget;
 
 public slots:
 	void OnActionOpen();

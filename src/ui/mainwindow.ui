@@ -107,7 +107,7 @@
       </widget>
      </item>
      <item row="0" column="3" rowspan="5">
-      <widget class="QScrollArea" name="scrollArea">
+      <widget class="QScrollArea" name="cell_scroll_area">
        <property name="widgetResizable">
         <bool>true</bool>
        </property>
@@ -116,10 +116,36 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>365</width>
+          <width>364</width>
           <height>557</height>
          </rect>
         </property>
+        <widget class="QWidget" name="horizontalLayoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>-1</x>
+           <y>-1</y>
+           <width>371</width>
+           <height>561</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="cell_layout">
+          <item>
+           <layout class="QVBoxLayout" name="index_layout">
+            <property name="leftMargin">
+             <number>50</number>
+            </property>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="value_layout">
+            <property name="leftMargin">
+             <number>50</number>
+            </property>
+           </layout>
+          </item>
+         </layout>
+        </widget>
        </widget>
       </widget>
      </item>
@@ -132,7 +158,7 @@
      <x>0</x>
      <y>0</y>
      <width>1007</width>
-     <height>16</height>
+     <height>18</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

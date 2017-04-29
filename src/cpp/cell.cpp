@@ -3,20 +3,27 @@
 #include "brainfuck.h"
 #include "cell.h"
 
-Cell::Cell(size_t index, QHBoxLayout* l)
+Cell::Cell(size_t index, QVBoxLayout* il, QVBoxLayout* vl)
 {
-	value_label = new QLabel(group_box);
+	value_label = new QLabel();
 	value_label->setText("0");
-	value_label->setGeometry(QRect(20, 50, 25, 8));
+	value_label->setGeometry(QRect(0, 0, 25, 8));
+	vl->addWidget(value_label);
 
-	//value_label->show();
+	index_label = new QLabel();
+index_label->setText(QString("Address: %1").arg(index));
+	index_label->setGeometry(0, 0, 25, 8);
+	il->addWidget(index_label);
 
-	l->addWidget(group_box);
+	index_label->show();
+	value_label->show();
 }
 
 Cell::~Cell()
 {
-	std::cout << "cell destructor called" << std::endl;
+	Hide();
+	delete value_label;
+	delete index_label;
 }
 
 void Cell::SetValue(int val)
@@ -26,4 +33,6 @@ void Cell::SetValue(int val)
 
 void Cell::Hide()
 {
+	value_label->hide();
+	index_label->hide();
 }

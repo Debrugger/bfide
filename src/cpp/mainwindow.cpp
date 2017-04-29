@@ -15,13 +15,14 @@ MainWindow::MainWindow()
 	connect(action_save, SIGNAL(triggered()), this, SLOT(OnActionSave()));
 	connect(button_exec, SIGNAL(clicked()), this, SLOT(OnExecuteClicked()));
 	connect(button_stop, SIGNAL(clicked()), this, SLOT(OnStopClicked()));
-	cell_widget = new QWidget;
-	cell_widget->setGeometry(QRect(10, 470, 981, 91));
-	cell_layout = new QHBoxLayout(cell_widget);
-	cell_layout->setObjectName(QStringLiteral("cell_layout"));
-	cell_layout->setSizeConstraint(QLayout::SetMaximumSize);
 
-	cell_scroll_area->setWidget(cell_widget);
+	//value_widget = new QWidget(scrollAreaWidgetContents);
+	//value_widget->setObjectName(QStringLiteral("value_widget"));
+	//value_layout->setWidget(value_widget);
+
+	//index_widget = new QWidget(scrollAreaWidgetContents);
+	//index_widget->setObjectName(QStringLiteral("index_widget"));
+	//index_layout->setWidget(index_widget);
 
 	setWindowTitle("bfide");
 }

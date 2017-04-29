@@ -69,7 +69,7 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
    if (!cell_boxes.size())
 	{
 		std::cout << "!cell_boxes.size()" << std::endl;
-		cell_boxes.push_back(new Cell(0, mw->cell_layout));
+		cell_boxes.push_back(new Cell(0, mw->index_layout, mw->value_layout));
 	}
 
 	switch (command.type)
@@ -95,7 +95,7 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 			if (current_cell == cells.size() - 1)
 			{
 				cells.resize(cells.size() + 1);
-				cell_boxes.push_back(new Cell(current_cell + 1, mw->cell_layout));
+				cell_boxes.push_back(new Cell(current_cell + 1, mw->index_layout, mw->value_layout));
 			}
 			current_cell++;
 			break;

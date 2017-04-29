@@ -5,10 +5,11 @@
 class Cell: public QWidget
 {
 	Q_OBJECT;
+	QLabel* index_label;
 	QLabel* value_label;
 
 	public:
-	Cell(size_t, QHBoxLayout*);
+	Cell(size_t, QVBoxLayout*, QVBoxLayout*);
 	~Cell();
 	void SetValue(int);
 	void Hide();
