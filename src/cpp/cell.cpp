@@ -11,7 +11,7 @@ Cell::Cell(size_t index, QVBoxLayout* il, QVBoxLayout* vl)
 	vl->addWidget(value_label);
 
 	index_label = new QLabel();
-index_label->setText(QString("Address: %1").arg(index));
+	index_label->setText(QString("%1").arg(index));
 	index_label->setGeometry(0, 0, 25, 8);
 	il->addWidget(index_label);
 

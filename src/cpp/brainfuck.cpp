@@ -75,7 +75,6 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 	switch (command.type)
 	{
 		case ADD:
-			//std::cout << "add" << std::endl;
 			if (*curr_val == 255)
 				*curr_val = 0;
 			else (*curr_val)++;
@@ -83,7 +82,6 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 			break;
 
 		case SUB:
-			//std::cout << "sub" << std::endl;
 			if (!*curr_val)
 				*curr_val = 255;
 			else (*curr_val)--;
@@ -91,7 +89,6 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 			break;
 
 		case INC:
-			//std::cout << "inc" << std::endl;
 			if (current_cell == cells.size() - 1)
 			{
 				cells.resize(cells.size() + 1);
@@ -101,7 +98,6 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 			break;
 
 		case DEC:
-			//std::cout << "dec" << std::endl;
 			if (!current_cell)
 			{
 				break;
@@ -110,18 +106,15 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 			break;
 
 		case PUT:
-			//std::cout << "put" << std::endl;
 			Output(static_cast<char>(*curr_val));
 			break;
 
 		case GET:
-			//std::cout << "get" << std::endl;
 			*curr_val = GetInput();
 			cell_boxes[current_cell]->SetValue(*curr_val);
 			break;
 
 		case BRO:
-			//std::cout << "bro" << std::endl;
 			br = true;
 			if (*curr_val == 0)
 				return command.matching_bracket + 1;
@@ -129,11 +122,7 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 			break;
 
 		case BRC:
-			//std::cout << "brc" << std::endl;
 			br = true;
-			//std::cout << "*curr_val: " << *curr_val << std::endl;
-			//std::cout << "index: " << index << std::endl;
-			//std::cout << "matching bracket: " << command.matching_bracket << std::endl;
 
          if (*curr_val == 0)
 				return index + 1;
@@ -149,7 +138,7 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 	return -1;
 }
 
-void Brainfuck::ExecuteAll(std::vector<Command> commands)
+void Brainfuck::ClearCells()
 {
    for (auto it : cell_boxes)
 	{
@@ -157,9 +146,11 @@ void Brainfuck::ExecuteAll(std::vector<Command> commands)
 		delete it;
 	}
 	cell_boxes.clear(); 
-	//std::cout << "size of cell_boxes: " << cell_boxes.size() << std::endl;
+}
 
-	std::cout << "cell size " << cells.size() << "cell_boxes " << cell_boxes.size() << std::endl;
+void Brainfuck::ExecuteAll(std::vector<Command> commands)
+{
+   ClearCells();
 	size_t i = 0;
 
 	mw->terminal_edit->clear();

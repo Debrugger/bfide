@@ -31,7 +31,7 @@ public:
 	size_t CurrentCell() 			{ return current_cell; };
 	size_t NbCells() 					{ return cells.size(); };
 	int CellValue(size_t index)   { return cells.at(index); };
+	void ClearCells();
 };
-
 
 #endif //__BRAINFUCK_H
