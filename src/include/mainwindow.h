@@ -6,6 +6,7 @@
 
 class Brainfuck;
 struct Command;
+extern bool stop;
 
 class MainWindow: public QMainWindow, public Ui::MainWindow
 {

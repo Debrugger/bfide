@@ -4,9 +4,11 @@
 #include "mainwindow.h"
 
 QString filename;
+bool stop;
 
 MainWindow::MainWindow()
 {
+	stop = false;
 	setupUi(this);
 	terminal_edit->setReadOnly(true);
 	input_edit->setReadOnly(true);
@@ -15,17 +17,10 @@ MainWindow::MainWindow()
 	connect(action_save_as, SIGNAL(triggered()), this, SLOT(OnActionSaveAs()));
 	connect(button_exec, SIGNAL(clicked()), this, SLOT(OnExecuteClicked()));
 	connect(button_stop, SIGNAL(clicked()), this, SLOT(OnStopClicked()));
-
-	//value_widget = new QWidget(scrollAreaWidgetContents);
-	//value_widget->setObjectName(QStringLiteral("value_widget"));
-	//value_layout->setWidget(value_widget);
-
-	//index_widget = new QWidget(scrollAreaWidgetContents);
-	//index_widget->setObjectName(QStringLiteral("index_widget"));
-	//index_layout->setWidget(index_widget);
 	value_layout->setAlignment(Qt::AlignTop);
 	index_layout->setAlignment(Qt::AlignTop);
-
+   button_next->setEnabled(false);
+	button_stop->setEnabled(false);
 	setWindowTitle("bfide");
 }
 
@@ -63,7 +58,7 @@ void MainWindow::SaveFile(QString fn)
 {
 	QFile file(fn);
 	file.open((QFile::ReadWrite | QFile::Text));
-	file.clear();
+	//file.clear();
 	QTextStream out(&file);
 	out << main_edit->toPlainText();
 	qDebug() << "saved as " << fn;
@@ -80,7 +75,6 @@ void MainWindow::OnExecuteClicked()
 	if (!step_checkbox->isChecked())	
 	{
 		brainfuck.ExecuteAll(parsed);
-		std::cout << "executing all" << std::endl;
 	}
 	else
 		StepByStep(&brainfuck, &parsed);
@@ -88,17 +82,26 @@ void MainWindow::OnExecuteClicked()
 
 void MainWindow::OnStopClicked()
 {
+	stop = true;
+	button_exec->setEnabled(true);
 }
 
 void MainWindow::StepByStep(Brainfuck* b, std::vector<Command>* p)
 {
 	size_t i = 0;
 	b->ClearCells();
-	while (i < p->size())
+	stop = false;
+	button_exec->setEnabled(false);
+	button_next->setEnabled(true);
+	button_stop->setEnabled(true);
+	while (i < p->size() && !stop)
 	{
 		i = b->Execute(*p, i);
 		QEventLoop l;
 		QWidget::connect(button_next, SIGNAL(clicked()), &l, SLOT(quit()));
 		l.exec();
 	}	
+	button_exec->setEnabled(true);
+	button_next->setEnabled(false);
+	button_stop->setEnabled(false);
 }

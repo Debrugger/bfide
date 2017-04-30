@@ -68,7 +68,6 @@ int Brainfuck::Execute(std::vector<Command> c, size_t index)
 
    if (!cell_boxes.size())
 	{
-		std::cout << "!cell_boxes.size()" << std::endl;
 		cell_boxes.push_back(new Cell(0, mw->index_layout, mw->value_layout));
 	}
 
@@ -150,21 +149,27 @@ void Brainfuck::ClearCells()
 
 void Brainfuck::ExecuteAll(std::vector<Command> commands)
 {
+	stop = false;
    ClearCells();
 	size_t i = 0;
 
 	mw->terminal_edit->clear();
-	std::cout << "cleared terminal" << std::endl;
-	while (i < commands.size())
+	mw->button_exec->setEnabled(false);
+	mw->button_stop->setEnabled(true);
+	while (i < commands.size() && !stop)
 	{
-		std::cout << "Executing Command " << i << std::endl;
+		std::cout << "Executed " << i;
 		i = Execute(commands, i);
+		//std::cout << ", next " << i << std::endl;
 		if (i < 0)
 		{
 			mw->statusBar()->showMessage("Error executing code.");
 			break;
 		}
 	}
+	//std::cout << "Out of execall loop at command " << i << "loop condition is " << (i < commands.size()) << std::endl;
+	mw->button_exec->setEnabled(true);
+	mw->button_stop->setEnabled(false);
 }
 
 void Brainfuck::Output(char c)
