@@ -1,0 +1,5 @@
+compiling src/cpp/bfgui.cpp ...
+src/cpp/bfgui.cpp: In member function ‘void Bfgui::ClearCells()’:
+src/cpp/bfgui.cpp:71:6: error: request for member ‘Hide’ in ‘* i.__gnu_cxx::__normal_iterator<_Iterator, _Container>::operator-><Cell**, std::vector<Cell*> >()’, which is of pointer type ‘Cell*’ (maybe you meant to use ‘->’ ?)
+src/cpp/bfgui.cpp:72:10: error: type ‘class __gnu_cxx::__normal_iterator<Cell**, std::vector<Cell*> >’ argument given to ‘delete’, expected pointer
+make: *** [Makefile:51: build/bfgui.o] Error 1

@@ -15,3 +15,4 @@
 #include <QGroupBox>
 #include <QLCDNumber>
 #include <QSizePolicy>
+#include <QPlainTextEdit>

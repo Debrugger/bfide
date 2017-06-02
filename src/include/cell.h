@@ -5,13 +5,16 @@
 class Cell: public QWidget
 {
 	Q_OBJECT;
-	QLabel* index_label;
-	QLabel* value_label;
+	size_t index;
+	int value;
 
 	public:
-	Cell(size_t, QVBoxLayout*, QVBoxLayout*);
+	QLabel* index_label;
+	QLabel* value_label;
+	Cell(size_t, QVBoxLayout* il, QVBoxLayout* vl);
 	~Cell();
 	void SetValue(int);
+	void SetHighlighted(bool);
 	void Hide();
 };
 

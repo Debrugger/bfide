@@ -1,7 +1,10 @@
 #include "sysinc.h"
 #include "qtinc.h"
 #include "brainfuck.h"
+#include "cell.h"
+#include "bfgui.h"
 #include "mainwindow.h"
+#include "globals.h"
 
 QString filename;
 bool stop;
@@ -22,11 +25,58 @@ MainWindow::MainWindow()
    button_next->setEnabled(false);
 	button_stop->setEnabled(false);
 	setWindowTitle("bfide");
+	brainfuck = new Bfgui(terminal_edit, input_edit, index_layout, value_layout);
 }
 
 MainWindow::~MainWindow()
 {
 }
+
+void MainWindow::OnExecuteClicked()
+{
+	using namespace Brainfuck;
+	Cmdvec parsed = brainfuck->Parse(main_edit->toPlainText().toStdString());
+	brainfuck->Reset();
+	stop = false;
+	button_stop->setEnabled(true);
+
+	if (!step_checkbox->isChecked())	
+	{
+		button_exec->setEnabled(false);
+		brainfuck->ExecuteAll(&parsed);
+		button_exec->setEnabled(true);
+	}
+	else
+		StepByStep(brainfuck, &parsed);
+	button_stop->setEnabled(false);
+}
+
+void MainWindow::OnStopClicked()
+{
+	printf("onstopclicked\n");
+	brainfuck->stop = true;
+	button_stop->setEnabled(false);
+	button_next->setEnabled(false);
+	button_exec->setEnabled(true);
+}
+
+void MainWindow::StepByStep(Bfgui* b, Cmdvec* p)
+{
+	size_t i = 0;
+	b->ClearCells();
+	button_exec->setEnabled(false);
+	button_next->setEnabled(true);
+	while (i < p->size() && !stop)
+	{
+		i = b->Execute(p, i);
+		QEventLoop l;
+		QWidget::connect(button_next, SIGNAL(clicked()), &l, SLOT(quit()));
+		l.exec();
+	}	
+	button_exec->setEnabled(true);
+	button_next->setEnabled(false);
+}
+
 
 void MainWindow::OnActionOpen()
 {
@@ -65,43 +115,4 @@ void MainWindow::SaveFile(QString fn)
 
  	statusBar()->showMessage(fn); 
 	setWindowTitle("bfide - " + fn);
-}
-
-void MainWindow::OnExecuteClicked()
-{
-	Brainfuck brainfuck;
-	std::vector<Command> parsed = brainfuck.Parse(main_edit->toPlainText().toStdString());
-
-	if (!step_checkbox->isChecked())	
-	{
-		brainfuck.ExecuteAll(parsed);
-	}
-	else
-		StepByStep(&brainfuck, &parsed);
-}
-
-void MainWindow::OnStopClicked()
-{
-	stop = true;
-	button_exec->setEnabled(true);
-}
-
-void MainWindow::StepByStep(Brainfuck* b, std::vector<Command>* p)
-{
-	size_t i = 0;
-	b->ClearCells();
-	stop = false;
-	button_exec->setEnabled(false);
-	button_next->setEnabled(true);
-	button_stop->setEnabled(true);
-	while (i < p->size() && !stop)
-	{
-		i = b->Execute(*p, i);
-		QEventLoop l;
-		QWidget::connect(button_next, SIGNAL(clicked()), &l, SLOT(quit()));
-		l.exec();
-	}	
-	button_exec->setEnabled(true);
-	button_next->setEnabled(false);
-	button_stop->setEnabled(false);
 }

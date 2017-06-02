@@ -1,17 +1,29 @@
 #ifndef __BFGUI_H
 #define __BFGUI_H
 
-extern bool stop;
-
-class Bfgui : public Brainfuck::BrainfuckInterpreter
+class Bfgui : public Brainfuck::Interpreter
 {
-public:
-	Bfgui();
-	~Bfgui();
+	std::vector<Cell*> cell_boxes;
 
-	int GetInput(QLineEdit* edit);
-	void Output(char c, QPlainTextEdit* edit);
-	void ExecuteAll(Cmdvec c);
+	void OnIncPtr();
+	void OnDecPtr();
+	void OnIncVal();
+	void OnDecVal();
+
+	QPlainTextEdit* out_edit;
+	QLineEdit* in_edit;
+	QVBoxLayout* il;
+	QVBoxLayout* vl;
+
+public:
+	Bfgui(QPlainTextEdit* _out_edit, QLineEdit* _in_edit, QVBoxLayout* _il, QVBoxLayout* _vl);
+	virtual ~Bfgui();
+
+	int GetInput();
+	virtual void Output(char c);
+	virtual void ExecuteAll(Cmdvec* c);
+	virtual void ClearCells();
+	void Reset();
 };
 
 #endif //__BFGUI_H

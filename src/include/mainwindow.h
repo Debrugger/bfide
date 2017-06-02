@@ -1,24 +1,28 @@
 #ifndef __MAINWINDOW_H
 #define __MAINWINDOW_H
 
+#include "sysinc.h"
 #include "build/mainwindow.ui.h"
-#include "qtinc.h"
+#include "brainfuck.h"
+#include "cell.h"
+#include "bfgui.h"
 
-class Brainfuck;
-struct Command;
 extern bool stop;
 
 class MainWindow: public QMainWindow, public Ui::MainWindow
 {
 	Q_OBJECT;
+	QWidget* value_widget; //did we need those?
+	QWidget* index_widget;
+
+	Bfgui* brainfuck;
+	void StepByStep(Bfgui*, std::vector<Brainfuck::Command>* parsed);
+	void SaveFile(QString fn);
+	void HighlightCell(size_t index);
 
 public:
 	MainWindow();
 	virtual ~MainWindow();
-	QWidget* value_widget;
-	QWidget* index_widget;
-	void StepByStep(Brainfuck*, std::vector<Command>* parsed);
-	void SaveFile(QString fn);
 
 public slots:
 	void OnActionOpen();

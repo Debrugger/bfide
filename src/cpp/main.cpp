@@ -1,6 +1,8 @@
 #include "sysinc.h"
 #include "qtinc.h"
 #include "brainfuck.h"
+#include "cell.h"
+#include "bfgui.h"
 #include "mainwindow.h"
 #include "globals.h"
 
