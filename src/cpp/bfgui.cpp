@@ -1,14 +1,11 @@
 #include "sysinc.h"
 #include "qtinc.h"
-#include "brainfuck.h"
+//#include "brainfuck.h"
 #include "cell.h"
 #include "bfgui.h"
 
-//TODO: first cell hidden on execute (Reset() is called)
-//no new cells are created
 Bfgui::Bfgui(QPlainTextEdit* _out_edit, QLineEdit* _in_edit, QVBoxLayout* _il, QVBoxLayout* _vl) : out_edit(_out_edit), in_edit(_in_edit), il(_il), vl(_vl)
 {
-	printf("constructing bfgui objext\n");
 	cell_boxes.push_back(new Cell(cell_boxes.size(), il, vl));
 	cell_boxes[0]->SetHighlighted(true);
 }
@@ -17,16 +14,16 @@ Bfgui::~Bfgui()
 {
 }
 
-void Bfgui::ExecuteAll(Cmdvec* c)
-{
-	size_t i = 0;
-	try { while ((i = Execute(c, i)) < c->size() && !stop); }
-	catch (Brainfuck::OffLimits)
-	{
-		std::cout << "Tried to execute off limit command. Exiting." << std::endl;
-		exit(1);
-	}
-}
+//void Bfgui::ExecuteAll(Cmdvec* c)
+//{
+//	size_t i = 0;
+//	try { while ((i = Brainfuck::Execute(this, c, i)) < c->size() && !stop); }
+//	catch (Brainfuck::OffLimits)
+//	{
+//		std::cout << "Tried to execute off limit command. Exiting." << std::endl;
+//		exit(1);
+//	}
+//}
 
 int Bfgui::GetInput()
 {
@@ -77,7 +74,7 @@ void Bfgui::OnIncVal()
 
 void Bfgui::OnDecVal()
 {
-	printf("ondecval called, assigning value %d to cell %d\n", CellValue(CurrentCell()), CurrentCell());
+	printf("ondecval called, assigning value %d to cell %lu\n", CellValue(CurrentCell()), CurrentCell());
 	cell_boxes[CurrentCell()]->SetValue(CellValue(CurrentCell()));
 }
 

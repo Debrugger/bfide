@@ -1,8 +1,13 @@
 #ifndef __BFGUI_H
 #define __BFGUI_H
 
-class Bfgui : public Brainfuck::Interpreter
+#include "qtinc.h"
+#include "brainfuck.h"
+class Cell;
+
+class Bfgui : public QObject, public Brainfuck::State 
 {
+	Q_OBJECT;
 	std::vector<Cell*> cell_boxes;
 
 	void OnIncPtr();
@@ -21,7 +26,7 @@ public:
 
 	int GetInput();
 	virtual void Output(char c);
-	virtual void ExecuteAll(Cmdvec* c);
+	//virtual void ExecuteAll(Cmdvec* c);
 	virtual void ClearCells();
 	void Reset();
 };

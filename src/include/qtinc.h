@@ -1,6 +1,6 @@
 #include <QApplication>
 #include <QDebug>
-
+#include <QThread>
 #include <QMainWindow>
 #include <QString>
 #include <QTimer>

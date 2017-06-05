@@ -3,19 +3,20 @@
 
 #include "sysinc.h"
 #include "build/mainwindow.ui.h"
-#include "brainfuck.h"
 #include "cell.h"
-#include "bfgui.h"
+#include "brainfuck.h"
 
-extern bool stop;
-
+class Bfgui;
+class Executer;
 class MainWindow: public QMainWindow, public Ui::MainWindow
 {
 	Q_OBJECT;
-	QWidget* value_widget; //did we need those?
-	QWidget* index_widget;
 
 	Bfgui* brainfuck;
+	Executer* executer;
+	QThread* exec_thread;
+	bool stop;
+	bool exec_thread_started;
 	void StepByStep(Bfgui*, std::vector<Brainfuck::Command>* parsed);
 	void SaveFile(QString fn);
 	void HighlightCell(size_t index);
@@ -25,6 +26,7 @@ public:
 	virtual ~MainWindow();
 
 public slots:
+	void OnExecDone();
 	void OnActionOpen();
 	void OnActionSave();
 	void OnActionSaveAs();

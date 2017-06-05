@@ -1,17 +1,29 @@
 #include "sysinc.h"
 #include "brainfuck.h"
 
-
-Brainfuck::Interpreter::Interpreter()
+Brainfuck::State::State()
 {
 	current_cell = 0;
 }
 
-Brainfuck::Interpreter::~Interpreter()
+Brainfuck::State::~State()
 {
 }
 
-std::vector<Brainfuck::Command> Brainfuck::Interpreter::Parse(std::string code)
+void Brainfuck::State::Output(char c)
+{
+	std::cout << c;
+}
+
+int Brainfuck::State::GetInput()
+{
+	std::string s;
+	std::cin >> s;
+	char c = s[0];
+	return static_cast<int>(c);
+}
+
+std::vector<Brainfuck::Command> Brainfuck::Parse(std::string code)
 {
 	using Brainfuck::Command;
 	std::vector<Command> commands;
@@ -57,13 +69,13 @@ std::vector<Brainfuck::Command> Brainfuck::Interpreter::Parse(std::string code)
 	return commands;
 }
 
-size_t Brainfuck::Interpreter::Execute(std::vector<Command>* c, size_t index)
+size_t Brainfuck::Execute(State* s, std::vector<Command>* c, size_t index)
 {
 	if (index > c->size())
 		throw OffLimits();
 	Command command = c->at(index);
-	if (!cells.size()) cells.push_back(0);
-   short int* curr_val = &cells[current_cell];
+	if (!s->cells.size()) s->cells.push_back(0);
+   int* curr_val = &(s->cells[s->current_cell]);
 	bool br = false;
 
 	switch (command.type)
@@ -72,39 +84,39 @@ size_t Brainfuck::Interpreter::Execute(std::vector<Command>* c, size_t index)
 			if (*curr_val == 255)
 				*curr_val = 0;
 			else (*curr_val)++;
-			OnIncVal();
+			s->OnIncVal();
 			break;
 
 		case SUB:
 			if (!*curr_val)
 				*curr_val = 255;
 			else (*curr_val)--;
-			OnDecVal();
+			s->OnDecVal();
 			break;
 
 		case INC:
-			if (current_cell == cells.size() - 1)
-				cells.resize(cells.size() + 1);
-			current_cell++;
-			OnIncPtr();
+			if (s->current_cell == s->cells.size() - 1)
+				s->cells.resize(s->cells.size() + 1);
+			s->current_cell++;
+			s->OnIncPtr();
 			break;
 
 		case DEC:
-			if (!current_cell)
+			if (!s->current_cell)
 				break;
 			else
 			{
-				current_cell--;
-				OnDecPtr();
+				s->current_cell--;
+				s->OnDecPtr();
 			}
 			break;
 
 		case PUT:
-			Output(static_cast<char>(*curr_val));
+			s->Output(static_cast<char>(*curr_val));
 			break;
 
 		case GET:
-			*curr_val = GetInput();
+			*curr_val = s->GetInput();
 			break;
 
 		case BRO:
@@ -128,17 +140,4 @@ size_t Brainfuck::Interpreter::Execute(std::vector<Command>* c, size_t index)
 	if (!br)
 		return index + 1;
 	return -1;
-}
-
-void Brainfuck::Interpreter::Output(char c)
-{
-	std::cout << c;
-}
-
-int Brainfuck::Interpreter::GetInput()
-{
-	std::string s;
-	std::cin >> s;
-	char c = s[0];
-	return static_cast<int>(c);
 }

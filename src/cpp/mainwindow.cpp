@@ -1,10 +1,10 @@
 #include "sysinc.h"
 #include "qtinc.h"
-#include "brainfuck.h"
-#include "cell.h"
+//#include "brainfuck.h"
 #include "bfgui.h"
+#include "cell.h"
+#include "exec_thread.h"
 #include "mainwindow.h"
-#include "globals.h"
 
 QString filename;
 bool stop;
@@ -12,6 +12,7 @@ bool stop;
 MainWindow::MainWindow()
 {
 	stop = false;
+	exec_thread_started = false;
 	setupUi(this);
 	terminal_edit->setReadOnly(true);
 	input_edit->setReadOnly(true);
@@ -35,26 +36,40 @@ MainWindow::~MainWindow()
 void MainWindow::OnExecuteClicked()
 {
 	using namespace Brainfuck;
-	Cmdvec parsed = brainfuck->Parse(main_edit->toPlainText().toStdString());
+	Cmdvec parsed = Brainfuck::Parse(main_edit->toPlainText().toStdString());
 	brainfuck->Reset();
 	stop = false;
 	button_stop->setEnabled(true);
 
 	if (!step_checkbox->isChecked())	
 	{
+		QThread* exec_thread = new QThread;
+		executer = new Executer(brainfuck, &parsed);
+		connect(executer, SIGNAL(ExecThread::Done()), exec_thread, SLOT(quit()));
+		connect(exec_thread, SIGNAL(started()), executer, SLOT(Exec()));
+		connect(button_stop, SIGNAL(clicked()), exec_thread, SLOT(quit()));
+		connect(executer, SIGNAL(Done()), executer, SLOT(deleteLater()));
+		connect(exec_thread, SIGNAL(finished()), exec_thread, SLOT(deleteLater()));
 		button_exec->setEnabled(false);
-		brainfuck->ExecuteAll(&parsed);
-		button_exec->setEnabled(true);
+		exec_thread->start();
+		exec_thread_started = true;
 	}
 	else
 		StepByStep(brainfuck, &parsed);
 	button_stop->setEnabled(false);
 }
 
+void MainWindow::OnExecDone()
+{
+	button_exec->setEnabled(true);
+	delete exec_thread;
+}
+
 void MainWindow::OnStopClicked()
 {
 	printf("onstopclicked\n");
-	brainfuck->stop = true;
+	stop = true;
+	if (exec_thread_started) { exec_thread->quit(); delete exec_thread; }
 	button_stop->setEnabled(false);
 	button_next->setEnabled(false);
 	button_exec->setEnabled(true);
@@ -68,7 +83,7 @@ void MainWindow::StepByStep(Bfgui* b, Cmdvec* p)
 	button_next->setEnabled(true);
 	while (i < p->size() && !stop)
 	{
-		i = b->Execute(p, i);
+		i = Brainfuck::Execute(b, p, i);
 		QEventLoop l;
 		QWidget::connect(button_next, SIGNAL(clicked()), &l, SLOT(quit()));
 		l.exec();

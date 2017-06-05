@@ -1,6 +1,6 @@
 #include "sysinc.h"
 #include "qtinc.h"
-#include "brainfuck.h"
+//#include "brainfuck.h"
 #include "cell.h"
 
 Cell::Cell(size_t _index, QVBoxLayout* il, QVBoxLayout* vl)
