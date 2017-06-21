@@ -1,6 +1,5 @@
 #include "sysinc.h"
 #include "qtinc.h"
-//#include "brainfuck.h"
 #include "cell.h"
 
 Cell::Cell(size_t _index, QVBoxLayout* il, QVBoxLayout* vl)
@@ -33,20 +32,23 @@ Cell::~Cell()
 void Cell::SetValue(int val)
 {
 	value = val;
-	value_label->setText(QString("%1").arg(val));
+	if (highlighted)
+		value_label->setText(QString("<b>%1</b>").arg(val));
+	else
+		value_label->setText(QString("%1").arg(val));
 }
 
 void Cell::SetHighlighted(bool b)
 {
 	if (b)
 	{
-		printf("index is %lu\n", index);
-		qDebug() << "setting cell #" << index << " to text " << QString::number(index);
+		highlighted = true;
 		index_label->setText("<b>" + QString::number(index) + "</b>");
 		value_label->setText("<b>" + QString::number(value) + "</b>");
 	}
 	else
 	{
+		highlighted = false;
       index_label->setText(QString::number(index));
 		value_label->setText(QString::number(value));
 	}
@@ -54,7 +56,6 @@ void Cell::SetHighlighted(bool b)
 
 void Cell::Hide()
 {
-	qDebug() << "hiding cell " << index_label->text();
 	value_label->hide();
 	index_label->hide();
 }

@@ -3,8 +3,8 @@
 
 #include "qtinc.h"
 #include "brainfuck.h"
-class Cell;
 
+class Cell;
 class Bfgui : public QObject, public Brainfuck::State 
 {
 	Q_OBJECT;

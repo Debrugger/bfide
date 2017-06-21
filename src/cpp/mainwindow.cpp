@@ -1,8 +1,8 @@
 #include "sysinc.h"
 #include "qtinc.h"
-//#include "brainfuck.h"
-#include "bfgui.h"
+#include "brainfuck.h"
 #include "cell.h"
+#include "bfgui.h"
 #include "exec_thread.h"
 #include "mainwindow.h"
 
@@ -35,7 +35,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::OnExecuteClicked()
 {
-	using namespace Brainfuck;
 	Cmdvec parsed = Brainfuck::Parse(main_edit->toPlainText().toStdString());
 	brainfuck->Reset();
 	stop = false;
@@ -44,11 +43,12 @@ void MainWindow::OnExecuteClicked()
 	if (!step_checkbox->isChecked())	
 	{
 		QThread* exec_thread = new QThread;
-		executer = new Executer(brainfuck, &parsed);
-		connect(executer, SIGNAL(ExecThread::Done()), exec_thread, SLOT(quit()));
+		executer = new Executer(brainfuck, parsed);
+		connect(executer, SIGNAL(Done()), exec_thread, SLOT(quit()));
 		connect(exec_thread, SIGNAL(started()), executer, SLOT(Exec()));
 		connect(button_stop, SIGNAL(clicked()), exec_thread, SLOT(quit()));
 		connect(executer, SIGNAL(Done()), executer, SLOT(deleteLater()));
+		connect(executer, SIGNAL(Done()), this, SLOT(OnExecDone()));
 		connect(exec_thread, SIGNAL(finished()), exec_thread, SLOT(deleteLater()));
 		button_exec->setEnabled(false);
 		exec_thread->start();
@@ -57,10 +57,12 @@ void MainWindow::OnExecuteClicked()
 	else
 		StepByStep(brainfuck, &parsed);
 	button_stop->setEnabled(false);
+	button_exec->setEnabled(true);
 }
 
 void MainWindow::OnExecDone()
 {
+	printf("Exec thread emitted done\n");
 	button_exec->setEnabled(true);
 	delete exec_thread;
 }
@@ -88,7 +90,6 @@ void MainWindow::StepByStep(Bfgui* b, Cmdvec* p)
 		QWidget::connect(button_next, SIGNAL(clicked()), &l, SLOT(quit()));
 		l.exec();
 	}	
-	button_exec->setEnabled(true);
 	button_next->setEnabled(false);
 }
 

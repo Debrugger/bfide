@@ -3,10 +3,9 @@
 
 #include "sysinc.h"
 #include "build/mainwindow.ui.h"
-#include "cell.h"
 #include "brainfuck.h"
+#include "bfgui.h"
 
-class Bfgui;
 class Executer;
 class MainWindow: public QMainWindow, public Ui::MainWindow
 {

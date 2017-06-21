@@ -7,6 +7,7 @@ class Cell: public QWidget
 	Q_OBJECT;
 	size_t index;
 	int value;
+	bool highlighted;
 
 	public:
 	QLabel* index_label;

@@ -11,7 +11,6 @@ namespace Brainfuck
 		size_t matching_bracket;
 		CommandType type;
 	};
-	std::unordered_map<char, CommandType> command_table = { {'+', ADD}, {'-', SUB}, {'>', INC}, {'<', DEC}, {'[', BRO}, {']', BRC}, {'.', PUT}, {',', GET} };
 
 	class State
 	{

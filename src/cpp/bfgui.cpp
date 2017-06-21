@@ -1,8 +1,7 @@
 #include "sysinc.h"
 #include "qtinc.h"
-//#include "brainfuck.h"
-#include "cell.h"
 #include "bfgui.h"
+#include "cell.h"
 
 Bfgui::Bfgui(QPlainTextEdit* _out_edit, QLineEdit* _in_edit, QVBoxLayout* _il, QVBoxLayout* _vl) : out_edit(_out_edit), in_edit(_in_edit), il(_il), vl(_vl)
 {
@@ -14,20 +13,8 @@ Bfgui::~Bfgui()
 {
 }
 
-//void Bfgui::ExecuteAll(Cmdvec* c)
-//{
-//	size_t i = 0;
-//	try { while ((i = Brainfuck::Execute(this, c, i)) < c->size() && !stop); }
-//	catch (Brainfuck::OffLimits)
-//	{
-//		std::cout << "Tried to execute off limit command. Exiting." << std::endl;
-//		exit(1);
-//	}
-//}
-
 int Bfgui::GetInput()
 {
-	printf("input called\n");
    in_edit->setReadOnly(false);
 	QString s;
 	QEventLoop loop;
@@ -42,7 +29,7 @@ int Bfgui::GetInput()
 
 void Bfgui::Output(char c)
 {
-	printf("Output called\n");
+	printf("outputting %c\n", c);
 	QString s;
   	s = c;
 	out_edit->moveCursor(QTextCursor::End);
@@ -63,8 +50,8 @@ void Bfgui::OnIncPtr()
 
 void Bfgui::OnDecPtr()
 {
-	cell_boxes[CurrentCell()]->SetHighlighted(false);
-	cell_boxes[CurrentCell() - 1]->SetHighlighted(true);
+	cell_boxes[CurrentCell()]->SetHighlighted(true);
+	cell_boxes[CurrentCell() + 1]->SetHighlighted(false);
 }
 
 void Bfgui::OnIncVal()
@@ -74,7 +61,6 @@ void Bfgui::OnIncVal()
 
 void Bfgui::OnDecVal()
 {
-	printf("ondecval called, assigning value %d to cell %lu\n", CellValue(CurrentCell()), CurrentCell());
 	cell_boxes[CurrentCell()]->SetValue(CellValue(CurrentCell()));
 }
 

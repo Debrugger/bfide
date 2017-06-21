@@ -26,6 +26,7 @@ int Brainfuck::State::GetInput()
 std::vector<Brainfuck::Command> Brainfuck::Parse(std::string code)
 {
 	using Brainfuck::Command;
+	std::unordered_map<char, CommandType> command_table = { {'+', ADD}, {'-', SUB}, {'>', INC}, {'<', DEC}, {'[', BRO}, {']', BRC}, {'.', PUT}, {',', GET} };
 	std::vector<Command> commands;
 	std::vector<size_t> brackets;
 
